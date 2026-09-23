@@ -19,11 +19,21 @@ if not exist "%JAVA_HOME%\bin\java.exe" (
 echo.
 echo Java utilizado neste projeto:
 "%JAVA_HOME%\bin\java.exe" -version
+
 echo.
 echo Iniciando Spring JJW...
 echo.
 
 call "%~dp0mvnw.cmd" spring-boot:run
+
+set "CODIGO_SAIDA=%ERRORLEVEL%"
+
+echo.
+if %CODIGO_SAIDA% equ 0 (
+    echo Aplicacao encerrada normalmente.
+) else (
+    echo Aplicacao encerrada com erro: %CODIGO_SAIDA%
+)
 
 endlocal
 pause
