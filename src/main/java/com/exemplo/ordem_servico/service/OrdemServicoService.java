@@ -35,4 +35,13 @@ public class OrdemServicoService {
         OrdemServico ordem = buscarPorId(id);
         repository.delete(ordem);
     }
+
+    public OrdemServico atualizar(Long id, OrdemServico novosDados) {
+        OrdemServico ordem = buscarPorId(id);
+        ordem.setCliente(novosDados.getCliente());
+        ordem.setDescricaoServico(novosDados.getDescricaoServico());
+        ordem.setHorasServico(novosDados.getHorasServico());
+        ordem.setCustoMateriais(novosDados.getCustoMateriais());
+        return repository.save(ordem);
+    }
 }
