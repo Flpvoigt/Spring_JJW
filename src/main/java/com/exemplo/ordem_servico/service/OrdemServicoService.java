@@ -30,4 +30,9 @@ public class OrdemServicoService {
                 .orElseThrow(() ->
                         new OrdemServicoNaoEncontradaException(id));
     }
+
+    public void excluir(Long id) {
+        OrdemServico ordem = buscarPorId(id);
+        repository.delete(ordem);
+    }
 }
