@@ -39,6 +39,9 @@ Os status disponíveis são `ABERTA`, `EM_ANDAMENTO`, `CONCLUIDA` e
 }
 ```
 
+Cada ordem também informa `criadaEm` e `atualizadaEm` em UTC. Esses campos
+são preenchidos automaticamente e não precisam ser enviados nas requisições.
+
 ## Respostas de erro
 
 Erros de validação retornam `400 Bad Request` no formato Problem Details,
