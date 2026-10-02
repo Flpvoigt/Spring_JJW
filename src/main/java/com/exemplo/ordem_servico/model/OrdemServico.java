@@ -2,6 +2,7 @@ package com.exemplo.ordem_servico.model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Instant;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +15,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
@@ -46,6 +49,11 @@ public class OrdemServico {
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private StatusOrdemServico status = StatusOrdemServico.ABERTA;
+
+    @Column(updatable = false)
+    private Instant criadaEm;
+
+    private Instant atualizadaEm;
     
 
     public Long getId() {
@@ -97,6 +105,26 @@ public class OrdemServico {
 
     public void setStatus(StatusOrdemServico status) {
         this.status = status;
+    }
+
+    public Instant getCriadaEm() {
+        return criadaEm;
+    }
+
+    public Instant getAtualizadaEm() {
+        return atualizadaEm;
+    }
+
+    @PrePersist
+    void registrarCriacao() {
+        Instant agora = Instant.now();
+        criadaEm = agora;
+        atualizadaEm = agora;
+    }
+
+    @PreUpdate
+    void registrarAtualizacao() {
+        atualizadaEm = Instant.now();
     }
 
     public BigDecimal getValorMaoDeObra() {
