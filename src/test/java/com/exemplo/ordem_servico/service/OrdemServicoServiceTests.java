@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,30 @@ class OrdemServicoServiceTests {
 
     @InjectMocks
     private OrdemServicoService service;
+
+    @Test
+    void deveListarTodasAsOrdensQuandoClienteNaoForInformado() {
+        List<OrdemServico> ordens = List.of(novaOrdem(
+                "Cliente", "Servico", "1", "0"));
+        when(repository.findAll()).thenReturn(ordens);
+
+        assertEquals(ordens, service.listar(null));
+        verify(repository).findAll();
+    }
+
+    @Test
+    void deveBuscarOrdensPorTrechoDoNomeDoCliente() {
+        List<OrdemServico> ordens = List.of(novaOrdem(
+                "Maria Silva", "Servico", "1", "0"));
+        when(repository.findByClienteContainingIgnoreCaseOrderByClienteAscIdAsc(
+                "maria"))
+                .thenReturn(ordens);
+
+        assertEquals(ordens, service.listar("  maria  "));
+        verify(repository)
+                .findByClienteContainingIgnoreCaseOrderByClienteAscIdAsc(
+                        "maria");
+    }
 
     @Test
     void deveExcluirOrdemExistente() {
