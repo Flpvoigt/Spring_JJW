@@ -11,6 +11,8 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import com.exemplo.ordem_servico.model.StatusOrdemServico;
+
 class ApiExceptionHandlerTests {
 
     private final ApiExceptionHandler handler = new ApiExceptionHandler();
@@ -47,5 +49,19 @@ class ApiExceptionHandlerTests {
         assertEquals(
                 Map.of("cliente", "O nome do cliente é obrigatório!"),
                 problema.getProperties().get("campos"));
+    }
+
+    @Test
+    void devePadronizarErroDeTransicaoDeStatus() {
+        ProblemDetail problema = handler.tratarTransicaoStatusInvalida(
+                new TransicaoStatusInvalidaException(
+                        StatusOrdemServico.ABERTA,
+                        StatusOrdemServico.CONCLUIDA));
+
+        assertEquals(HttpStatus.CONFLICT.value(), problema.getStatus());
+        assertEquals("Transição de status inválida", problema.getTitle());
+        assertEquals(
+                "Não é permitido alterar o status de ABERTA para CONCLUIDA",
+                problema.getDetail());
     }
 }

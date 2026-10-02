@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.exemplo.ordem_servico.exception.OrdemServicoNaoEncontradaException;
+import com.exemplo.ordem_servico.exception.TransicaoStatusInvalidaException;
 import com.exemplo.ordem_servico.model.OrdemServico;
 import com.exemplo.ordem_servico.model.StatusOrdemServico;
 import com.exemplo.ordem_servico.repository.OrdemServicoRepository;
@@ -53,6 +54,13 @@ public class OrdemServicoService {
 
     public OrdemServico atualizarStatus(Long id, StatusOrdemServico status) {
         OrdemServico ordem = buscarPorId(id);
+        StatusOrdemServico statusAtual = ordem.getStatus();
+        if (!statusAtual.podeTransicionarPara(status)) {
+            throw new TransicaoStatusInvalidaException(statusAtual, status);
+        }
+        if (statusAtual == status) {
+            return ordem;
+        }
         ordem.setStatus(status);
         return repository.save(ordem);
     }

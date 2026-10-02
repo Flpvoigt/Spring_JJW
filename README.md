@@ -39,6 +39,14 @@ Os status disponíveis são `ABERTA`, `EM_ANDAMENTO`, `CONCLUIDA` e
 }
 ```
 
+Transições permitidas:
+
+- `ABERTA` → `EM_ANDAMENTO` ou `CANCELADA`;
+- `EM_ANDAMENTO` → `CONCLUIDA` ou `CANCELADA`;
+- `CONCLUIDA` e `CANCELADA` são estados finais.
+
+Uma transição não permitida retorna `409 Conflict`.
+
 Cada ordem também informa `criadaEm` e `atualizadaEm` em UTC. Esses campos
 são preenchidos automaticamente e não precisam ser enviados nas requisições.
 

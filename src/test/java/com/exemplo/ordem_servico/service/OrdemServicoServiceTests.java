@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.exemplo.ordem_servico.exception.OrdemServicoNaoEncontradaException;
+import com.exemplo.ordem_servico.exception.TransicaoStatusInvalidaException;
 import com.exemplo.ordem_servico.model.OrdemServico;
 import com.exemplo.ordem_servico.model.StatusOrdemServico;
 import com.exemplo.ordem_servico.repository.OrdemServicoRepository;
@@ -114,10 +115,23 @@ class OrdemServicoServiceTests {
 
         OrdemServico atualizada = service.atualizarStatus(
                 1L,
-                StatusOrdemServico.CONCLUIDA);
+                StatusOrdemServico.EM_ANDAMENTO);
 
-        assertEquals(StatusOrdemServico.CONCLUIDA, atualizada.getStatus());
+        assertEquals(StatusOrdemServico.EM_ANDAMENTO, atualizada.getStatus());
         verify(repository).save(ordem);
+    }
+
+    @Test
+    void deveRecusarTransicaoDeStatusInvalida() {
+        OrdemServico ordem = novaOrdem("Cliente", "Servico", "1", "0");
+        ordem.setId(1L);
+        when(repository.findById(1L)).thenReturn(Optional.of(ordem));
+
+        assertThrows(
+                TransicaoStatusInvalidaException.class,
+                () -> service.atualizarStatus(
+                        1L,
+                        StatusOrdemServico.CONCLUIDA));
     }
 
     private OrdemServico novaOrdem(
