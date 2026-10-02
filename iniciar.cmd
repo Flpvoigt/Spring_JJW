@@ -3,14 +3,10 @@ setlocal
 
 cd /d "%~dp0"
 
-set "JAVA_HOME=%~dp0.tools\jdk-25\jdk-25.0.2"
-set "PATH=%JAVA_HOME%\bin;%PATH%"
-
-if not exist "%JAVA_HOME%\bin\java.exe" (
+where java >nul 2>nul
+if errorlevel 1 (
     echo.
-    echo ERRO: JDK 25 local nao encontrado.
-    echo Caminho esperado:
-    echo %JAVA_HOME%
+    echo ERRO: Java 21 ou superior nao foi encontrado no PATH.
     echo.
     pause
     exit /b 1
@@ -18,7 +14,7 @@ if not exist "%JAVA_HOME%\bin\java.exe" (
 
 echo.
 echo Java utilizado neste projeto:
-"%JAVA_HOME%\bin\java.exe" -version
+java -version
 
 echo.
 echo Iniciando Spring JJW...

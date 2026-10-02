@@ -6,13 +6,17 @@ Projeto desenvolvido em parceria por [Flpvoigt](https://github.com/Flpvoigt) e
 
 ## Requisitos
 
-- Java 25
+- Java 21 ou superior
 - Maven Wrapper incluído no projeto
 
 ## Como executar
 
-No Windows, execute `iniciar.cmd`. O script utiliza o JDK 25 armazenado em
-`.tools` somente durante a execução deste projeto.
+No Windows, confirme que o Java está disponível no `PATH` e execute
+`iniciar.cmd`. Também é possível iniciar a aplicação diretamente:
+
+```powershell
+.\mvnw.cmd spring-boot:run
+```
 
 ## Endpoints
 
@@ -26,7 +30,7 @@ No Windows, execute `iniciar.cmd`. O script utiliza o JDK 25 armazenado em
 
 ## Testes
 
-Com o Java 25 configurado, execute:
+Com o Java 21 ou superior configurado, execute:
 
 ```powershell
 .\mvnw.cmd test
