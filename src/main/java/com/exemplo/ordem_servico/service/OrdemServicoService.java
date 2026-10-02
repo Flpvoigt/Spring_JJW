@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.exemplo.ordem_servico.exception.OrdemServicoNaoEncontradaException;
 import com.exemplo.ordem_servico.model.OrdemServico;
+import com.exemplo.ordem_servico.model.StatusOrdemServico;
 import com.exemplo.ordem_servico.repository.OrdemServicoRepository;
 
 @Service
@@ -47,6 +48,12 @@ public class OrdemServicoService {
         ordem.setDescricaoServico(novosDados.getDescricaoServico());
         ordem.setHorasServico(novosDados.getHorasServico());
         ordem.setCustoMateriais(novosDados.getCustoMateriais());
+        return repository.save(ordem);
+    }
+
+    public OrdemServico atualizarStatus(Long id, StatusOrdemServico status) {
+        OrdemServico ordem = buscarPorId(id);
+        ordem.setStatus(status);
         return repository.save(ordem);
     }
 }

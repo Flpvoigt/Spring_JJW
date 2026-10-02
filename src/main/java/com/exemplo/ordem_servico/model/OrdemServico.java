@@ -4,10 +4,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,6 +41,11 @@ public class OrdemServico {
     @PositiveOrZero(message = "O custo dos materiais não pode ser negativo")
     @Column(precision = 12, scale = 2)
     private BigDecimal custoMateriais;
+
+    @NotNull(message = "O status é obrigatório")
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private StatusOrdemServico status = StatusOrdemServico.ABERTA;
     
 
     public Long getId() {
@@ -81,6 +89,14 @@ public class OrdemServico {
 
     public void setCustoMateriais(BigDecimal custoMateriais) {
         this.custoMateriais = custoMateriais;
+    }
+
+    public StatusOrdemServico getStatus() {
+        return status == null ? StatusOrdemServico.ABERTA : status;
+    }
+
+    public void setStatus(StatusOrdemServico status) {
+        this.status = status;
     }
 
     public BigDecimal getValorMaoDeObra() {
