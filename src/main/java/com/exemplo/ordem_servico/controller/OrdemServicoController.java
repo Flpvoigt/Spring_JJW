@@ -1,6 +1,9 @@
 package com.exemplo.ordem_servico.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +19,6 @@ import com.exemplo.ordem_servico.model.OrdemServico;
 import com.exemplo.ordem_servico.service.OrdemServicoService;
 
 import jakarta.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/ordens")
@@ -34,9 +36,10 @@ public class OrdemServicoController {
     }
 
     @GetMapping
-    public List<OrdemServico> listar(
-            @RequestParam(required = false) String cliente) {
-        return service.listar(cliente);
+    public Page<OrdemServico> listar(
+            @RequestParam(required = false) String cliente,
+            @PageableDefault(size = 20, sort = "cliente") Pageable pageable) {
+        return service.listar(cliente, pageable);
     }
 
     @GetMapping("/{id}")
