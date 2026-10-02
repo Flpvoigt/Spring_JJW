@@ -44,4 +44,14 @@ public class ApiExceptionHandler {
         problema.setProperty("campos", campos);
         return problema;
     }
+
+    @ExceptionHandler(TransicaoStatusInvalidaException.class)
+    public ProblemDetail tratarTransicaoStatusInvalida(
+            TransicaoStatusInvalidaException exception) {
+        ProblemDetail problema = ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
+                exception.getMessage());
+        problema.setTitle("Transição de status inválida");
+        return problema;
+    }
 }
