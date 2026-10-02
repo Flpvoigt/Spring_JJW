@@ -9,6 +9,13 @@ import org.junit.jupiter.api.Test;
 class OrdemServicoTests {
 
     @Test
+    void deveIniciarOrdemComStatusAberta() {
+        OrdemServico ordem = new OrdemServico();
+
+        assertEquals(StatusOrdemServico.ABERTA, ordem.getStatus());
+    }
+
+    @Test
     void deveCalcularValoresMonetariosComPrecisaoDecimal() {
         OrdemServico ordem = new OrdemServico();
         ordem.setHorasServico(new BigDecimal("1.15"));

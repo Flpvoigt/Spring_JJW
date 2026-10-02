@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.exemplo.ordem_servico.exception.OrdemServicoNaoEncontradaException;
 import com.exemplo.ordem_servico.model.OrdemServico;
+import com.exemplo.ordem_servico.model.StatusOrdemServico;
 import com.exemplo.ordem_servico.repository.OrdemServicoRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -102,6 +103,21 @@ class OrdemServicoServiceTests {
         assertThrows(
                 OrdemServicoNaoEncontradaException.class,
                 () -> service.atualizar(99L, novosDados));
+    }
+
+    @Test
+    void deveAtualizarStatusDaOrdem() {
+        OrdemServico ordem = novaOrdem("Cliente", "Servico", "1", "0");
+        ordem.setId(1L);
+        when(repository.findById(1L)).thenReturn(Optional.of(ordem));
+        when(repository.save(ordem)).thenReturn(ordem);
+
+        OrdemServico atualizada = service.atualizarStatus(
+                1L,
+                StatusOrdemServico.CONCLUIDA);
+
+        assertEquals(StatusOrdemServico.CONCLUIDA, atualizada.getStatus());
+        verify(repository).save(ordem);
     }
 
     private OrdemServico novaOrdem(

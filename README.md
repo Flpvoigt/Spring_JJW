@@ -27,7 +27,17 @@ No Windows, confirme que o Java está disponível no `PATH` e execute
 | `GET` | `/ordens?cliente=nome&page=0&size=20` | Filtra ordens pelo cliente e mantém a paginação |
 | `GET` | `/ordens/{id}` | Consulta uma ordem pelo ID |
 | `PUT` | `/ordens/{id}` | Atualiza uma ordem existente |
+| `PATCH` | `/ordens/{id}/status` | Atualiza o status da ordem |
 | `DELETE` | `/ordens/{id}` | Exclui uma ordem existente |
+
+Os status disponíveis são `ABERTA`, `EM_ANDAMENTO`, `CONCLUIDA` e
+`CANCELADA`. Para atualizar, envie por exemplo:
+
+```json
+{
+  "status": "CONCLUIDA"
+}
+```
 
 ## Respostas de erro
 
