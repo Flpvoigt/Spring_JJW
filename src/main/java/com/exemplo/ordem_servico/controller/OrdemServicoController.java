@@ -1,6 +1,9 @@
 package com.exemplo.ordem_servico.controller;
 
+import java.net.URI;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -33,8 +36,11 @@ public class OrdemServicoController {
     }
 
     @PostMapping
-    public OrdemServico criar(@Valid @RequestBody OrdemServico ordem) {
-        return service.criar(ordem);
+    public ResponseEntity<OrdemServico> criar(
+            @Valid @RequestBody OrdemServico ordem) {
+        OrdemServico criada = service.criar(ordem);
+        URI localizacao = URI.create("/ordens/" + criada.getId());
+        return ResponseEntity.created(localizacao).body(criada);
     }
 
     @GetMapping
