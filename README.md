@@ -29,6 +29,13 @@ No Windows, confirme que o Java está disponível no `PATH` e execute
 | `PUT` | `/ordens/{id}` | Atualiza uma ordem existente |
 | `DELETE` | `/ordens/{id}` | Exclui uma ordem existente |
 
+## Respostas de erro
+
+Erros de validação retornam `400 Bad Request` no formato Problem Details,
+incluindo uma propriedade `campos` com as mensagens de cada campo inválido.
+Consultas, atualizações ou exclusões de IDs inexistentes retornam
+`404 Not Found` no mesmo formato padronizado.
+
 ## Testes
 
 Com o Java 21 ou superior configurado, execute:
