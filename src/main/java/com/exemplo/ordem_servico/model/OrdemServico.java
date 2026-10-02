@@ -1,8 +1,12 @@
 package com.exemplo.ordem_servico.model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,7 +17,8 @@ import jakarta.persistence.Table;
 @Table(name = "ordens_servico")
 public class OrdemServico {
 
-private static final double VALOR_HORA = 80.00;
+    private static final BigDecimal VALOR_HORA = new BigDecimal("80.00");
+    private static final int ESCALA_MONETARIA = 2;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +32,12 @@ private static final double VALOR_HORA = 80.00;
     
 
     @Positive(message = "A quantidade de horas deve ser maior que zero")
-    private double horasServico;
+    @Column(precision = 8, scale = 2)
+    private BigDecimal horasServico;
 
     @PositiveOrZero(message = "O custo dos materiais não pode ser negativo")
-    private double custoMateriais;
+    @Column(precision = 12, scale = 2)
+    private BigDecimal custoMateriais;
     
 
     public Long getId() {
@@ -60,27 +67,29 @@ private static final double VALOR_HORA = 80.00;
         this.descricaoServico = descricaoServico;
     }
 
-    public double getHorasServico() {
+    public BigDecimal getHorasServico() {
         return horasServico;
     }
 
-    public void setHorasServico(double horasServico) {
+    public void setHorasServico(BigDecimal horasServico) {
         this.horasServico = horasServico;
     }
 
-    public double getCustoMateriais() {
+    public BigDecimal getCustoMateriais() {
         return custoMateriais;
     }
 
-    public void setCustoMateriais(double custoMateriais) {
+    public void setCustoMateriais(BigDecimal custoMateriais) {
         this.custoMateriais = custoMateriais;
     }
 
-    public double getValorMaoDeObra() {
-        return horasServico * VALOR_HORA;
+    public BigDecimal getValorMaoDeObra() {
+        return horasServico.multiply(VALOR_HORA)
+                .setScale(ESCALA_MONETARIA, RoundingMode.HALF_UP);
     }
 
-    public double getCustoTotal() {
-        return getValorMaoDeObra() + custoMateriais;
+    public BigDecimal getCustoTotal() {
+        return getValorMaoDeObra().add(custoMateriais)
+                .setScale(ESCALA_MONETARIA, RoundingMode.HALF_UP);
     }
 }

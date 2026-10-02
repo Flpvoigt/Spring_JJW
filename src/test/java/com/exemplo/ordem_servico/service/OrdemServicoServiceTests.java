@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -48,9 +49,9 @@ class OrdemServicoServiceTests {
 
     @Test
     void deveAtualizarOrdemExistente() {
-        OrdemServico ordem = novaOrdem("Cliente antigo", "Servico antigo", 1, 10);
+        OrdemServico ordem = novaOrdem("Cliente antigo", "Servico antigo", "1", "10");
         ordem.setId(1L);
-        OrdemServico novosDados = novaOrdem("Cliente novo", "Servico novo", 2, 25);
+        OrdemServico novosDados = novaOrdem("Cliente novo", "Servico novo", "2", "25");
         when(repository.findById(1L)).thenReturn(Optional.of(ordem));
         when(repository.save(ordem)).thenReturn(ordem);
 
@@ -59,14 +60,14 @@ class OrdemServicoServiceTests {
         assertEquals(1L, atualizada.getId());
         assertEquals("Cliente novo", atualizada.getCliente());
         assertEquals("Servico novo", atualizada.getDescricaoServico());
-        assertEquals(2, atualizada.getHorasServico());
-        assertEquals(25, atualizada.getCustoMateriais());
+        assertEquals(new BigDecimal("2"), atualizada.getHorasServico());
+        assertEquals(new BigDecimal("25"), atualizada.getCustoMateriais());
         verify(repository).save(ordem);
     }
 
     @Test
     void deveRetornarNaoEncontradoAoAtualizarOrdemInexistente() {
-        OrdemServico novosDados = novaOrdem("Cliente", "Servico", 1, 0);
+        OrdemServico novosDados = novaOrdem("Cliente", "Servico", "1", "0");
         when(repository.findById(99L)).thenReturn(Optional.empty());
 
         assertThrows(
@@ -77,13 +78,13 @@ class OrdemServicoServiceTests {
     private OrdemServico novaOrdem(
             String cliente,
             String descricao,
-            double horas,
-            double materiais) {
+            String horas,
+            String materiais) {
         OrdemServico ordem = new OrdemServico();
         ordem.setCliente(cliente);
         ordem.setDescricaoServico(descricao);
-        ordem.setHorasServico(horas);
-        ordem.setCustoMateriais(materiais);
+        ordem.setHorasServico(new BigDecimal(horas));
+        ordem.setCustoMateriais(new BigDecimal(materiais));
         return ordem;
     }
 }
