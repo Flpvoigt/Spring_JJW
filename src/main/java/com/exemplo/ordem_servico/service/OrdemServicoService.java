@@ -21,7 +21,12 @@ public class OrdemServicoService {
         return repository.save(ordem);
     }
 
-    public List<OrdemServico> listar() {
+    public List<OrdemServico> listar(String cliente) {
+        if (cliente != null && !cliente.isBlank()) {
+            return repository
+                    .findByClienteContainingIgnoreCaseOrderByClienteAscIdAsc(
+                            cliente.trim());
+        }
         return repository.findAll();
     }
 

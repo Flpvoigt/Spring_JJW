@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.exemplo.ordem_servico.model.OrdemServico;
 import com.exemplo.ordem_servico.service.OrdemServicoService;
@@ -32,9 +33,10 @@ public class OrdemServicoController {
         return service.criar(ordem);
     }
 
-    @GetMapping 
-    public List<OrdemServico> listar() {
-        return service.listar();
+    @GetMapping
+    public List<OrdemServico> listar(
+            @RequestParam(required = false) String cliente) {
+        return service.listar(cliente);
     }
 
     @GetMapping("/{id}")
