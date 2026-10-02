@@ -30,6 +30,8 @@ No Windows, confirme que o Java está disponível no `PATH` e execute
 | `PATCH` | `/ordens/{id}/status` | Atualiza o status da ordem |
 | `DELETE` | `/ordens/{id}` | Exclui uma ordem existente |
 
+O tamanho máximo aceito por página é de 100 registros.
+
 Os status disponíveis são `ABERTA`, `EM_ANDAMENTO`, `CONCLUIDA` e
 `CANCELADA`. Para atualizar, envie por exemplo:
 
