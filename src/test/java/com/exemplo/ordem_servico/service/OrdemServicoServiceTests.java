@@ -6,11 +6,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -30,26 +33,27 @@ class OrdemServicoServiceTests {
 
     @Test
     void deveListarTodasAsOrdensQuandoClienteNaoForInformado() {
-        List<OrdemServico> ordens = List.of(novaOrdem(
-                "Cliente", "Servico", "1", "0"));
-        when(repository.findAll()).thenReturn(ordens);
+        Pageable pagina = PageRequest.of(0, 20);
+        Page<OrdemServico> ordens = new PageImpl<>(java.util.List.of(novaOrdem(
+                "Cliente", "Servico", "1", "0")));
+        when(repository.findAll(pagina)).thenReturn(ordens);
 
-        assertEquals(ordens, service.listar(null));
-        verify(repository).findAll();
+        assertEquals(ordens, service.listar(null, pagina));
+        verify(repository).findAll(pagina);
     }
 
     @Test
     void deveBuscarOrdensPorTrechoDoNomeDoCliente() {
-        List<OrdemServico> ordens = List.of(novaOrdem(
-                "Maria Silva", "Servico", "1", "0"));
-        when(repository.findByClienteContainingIgnoreCaseOrderByClienteAscIdAsc(
-                "maria"))
+        Pageable pagina = PageRequest.of(0, 10);
+        Page<OrdemServico> ordens = new PageImpl<>(java.util.List.of(novaOrdem(
+                "Maria Silva", "Servico", "1", "0")));
+        when(repository.findByClienteContainingIgnoreCase(
+                "maria", pagina))
                 .thenReturn(ordens);
 
-        assertEquals(ordens, service.listar("  maria  "));
+        assertEquals(ordens, service.listar("  maria  ", pagina));
         verify(repository)
-                .findByClienteContainingIgnoreCaseOrderByClienteAscIdAsc(
-                        "maria");
+                .findByClienteContainingIgnoreCase("maria", pagina);
     }
 
     @Test

@@ -1,7 +1,7 @@
 package com.exemplo.ordem_servico.service;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.exemplo.ordem_servico.exception.OrdemServicoNaoEncontradaException;
@@ -21,13 +21,13 @@ public class OrdemServicoService {
         return repository.save(ordem);
     }
 
-    public List<OrdemServico> listar(String cliente) {
+    public Page<OrdemServico> listar(String cliente, Pageable pageable) {
         if (cliente != null && !cliente.isBlank()) {
             return repository
-                    .findByClienteContainingIgnoreCaseOrderByClienteAscIdAsc(
-                            cliente.trim());
+                    .findByClienteContainingIgnoreCase(
+                            cliente.trim(), pageable);
         }
-        return repository.findAll();
+        return repository.findAll(pageable);
     }
 
     public OrdemServico buscarPorId(Long id) {
